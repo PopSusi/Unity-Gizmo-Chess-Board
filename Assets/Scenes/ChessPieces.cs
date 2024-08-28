@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public enum MyType { Rook, Queen, Knight, King, Bishop, Pawn };
@@ -37,12 +38,20 @@ public class ChessPieces : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         myMovement.Movement(transform.position);
+        myMovement.HandleShow(transform.position, MyPieceType);
     }
 }
 
-public abstract class ChessPieceMovement
+public abstract class ChessPieceMovement : Editor
 {
     public abstract void Movement(Vector3 pos);
+    public void HandleShow(Vector3 pos, MyType myPiece)
+    {
+        Handles.color = Color.blue;
+        Handles.DrawWireDisc(pos, Vector3.up, 1.0f);
+        GUI.color = Color.black;
+        Handles.Label(pos + new Vector3(.2f, 0, .7f), myPiece.ToString());
+    }
 }
 public class Rook : ChessPieceMovement
 {
